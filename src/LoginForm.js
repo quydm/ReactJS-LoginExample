@@ -1,4 +1,5 @@
 import React from 'react'
+import request from 'request'
 
 class LoginForm extends React.Component {
 
@@ -6,22 +7,31 @@ class LoginForm extends React.Component {
 		super(props);
 
 		this.state = {
-			userName: '',
+			email: '',
 			password: ''
 		};
 
 		this.handleFormSubmit = this.formSubmit.bind(this);
-		this.handleOnUserNameChange = this.onUserNameChange.bind(this);
+		this.handleOnEmailChange = this.onEmailChange.bind(this);
 		this.handleOnPasswordChange = this.onPasswordChange.bind(this);
 	}
 
 	formSubmit(e) {
 		e.preventDefault();
-		console.log(this.state);
+		request.post({
+			url: 'http://54.253.12.41:8100/api/users/login',
+			form: {
+				email: this.state.email,
+				password: this.state.password
+			}
+		}, function(err, httpResponse, body) {
+			console.log(err);
+			console.log(body);
+		})
 	}
 
-	onUserNameChange(e) {
-		this.setState({userName: e.target.value});
+	onEmailChange(e) {
+		this.setState({email: e.target.value});
 	}
 
 	onPasswordChange(e) {
@@ -32,8 +42,8 @@ class LoginForm extends React.Component {
 		return (
 			<form onSubmit={this.handleFormSubmit}>
 				<div className="container">
-					<FormLabel text="Username" />
-					<FormInput type="text" onChange={this.handleOnUserNameChange} />
+					<FormLabel text="Email" />
+					<FormInput type="text" onChange={this.handleOnEmailChange} />
 
 					<FormLabel text="Password" />
 					<FormInput type="password" onChange={this.handleOnPasswordChange} />
