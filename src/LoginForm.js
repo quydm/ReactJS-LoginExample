@@ -1,5 +1,8 @@
 import React from 'react'
 import request from 'request'
+import MyFormInput from './components/MyFormInput'
+import MyFormButton from './components/MyFormButton'
+import MyFormLabel from './components/MyFormLabel'
 
 class LoginForm extends React.Component {
 
@@ -24,72 +27,42 @@ class LoginForm extends React.Component {
 				email: this.state.email,
 				password: this.state.password
 			}
-		}, function(err, httpResponse, body) {
+		}, function (err, httpResponse, body) {
 			console.log(err);
 			console.log(body);
 		})
 	}
 
 	onEmailChange(e) {
-		this.setState({email: e.target.value});
+		this.updateState("email", e);
 	}
 
 	onPasswordChange(e) {
-		this.setState({password: e.target.value});
+		this.updateState("password", e);
+	}
+
+	updateState(key, e) {
+		var tmpState = {};
+		tmpState[key] = e.target.value;
+		this.setState(tmpState);
 	}
 
 	render() {
 		return (
 			<form onSubmit={this.handleFormSubmit}>
 				<div className="container">
-					<FormLabel text="Email" />
-					<FormInput type="text" onChange={this.handleOnEmailChange} />
+					<MyFormLabel text="Email" />
+					<MyFormInput type="text" onChange={this.handleOnEmailChange} />
 
-					<FormLabel text="Password" />
-					<FormInput type="password" onChange={this.handleOnPasswordChange} />
+					<MyFormLabel text="Password" />
+					<MyFormInput type="password" onChange={this.handleOnPasswordChange} />
 
-					<FormButton type="submit" text="Login" />
+					<MyFormButton type="submit" text="Login" />
 				</div>
 			</form>
 		)
 	}
-	
-}
 
-class FormInput extends React.Component {
-
-	constructor(props) {
-		super(props);
-
-		this.handleOnInputChange = this.onInputChange.bind(this);
-	}
-
-	onInputChange(e) {
-		this.props.onChange(e);
-	}
-
-	render() {
-		const type = this.props.type;
-
-		return (
-			<input type={type} onChange={this.handleOnInputChange} />
-		)
-	}
-
-}
-
-function FormLabel(props) {
-	return (
-		<label>
-			<b>{props.text}</b>
-		</label>
-	)
-}
-
-function FormButton(props) {
-	return (
-		<button type={props.type}>{props.text}</button>
-	)
 }
 
 export default LoginForm
